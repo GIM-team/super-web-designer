@@ -1,0 +1,16 @@
+{
+  "name": "gim-design",
+  "owner": {
+    "name": "GIM Agency"
+  },
+  "plugins": [
+    {
+      "name": "super-web-designer",
+      "source": "./plugins/super-web-designer",
+      "description": "Impeccable + Emil Kowalski + Taste design skills, plus visual-check (Playwright desktop/mobile screenshots)."
+    }
+  ],
+  "metadata": {
+    "description": "GIM Agency design tooling for Claude Code"
+  }
+}

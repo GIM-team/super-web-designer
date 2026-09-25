@@ -1,0 +1,26 @@
+name: Sync upstream skills
+# Κάθε Δευτέρα: τραβάει Impeccable / Emil Kowalski / Taste, και αν άλλαξε κάτι
+# κάνει commit με νέο version → οι χρήστες το παίρνουν μέσω auto-update του marketplace.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: ./scripts/sync-upstream.sh
+      - name: Commit if changed
+        run: |
+          git add -A plugins UPSTREAM.lock
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          v=$(node -p "require('./plugins/super-web-designer/.claude-plugin/plugin.json').version")
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Sync upstream skills → v$v" -m "$(cat UPSTREAM.lock)"
+          git push
